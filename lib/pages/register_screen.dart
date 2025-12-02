@@ -5,14 +5,17 @@ import 'package:eventaty/widgets/LoginAndRegisterWidgets/custom_login_and_regist
 import 'package:eventaty/widgets/LoginAndRegisterWidgets/custom_login_register_switch.dart';
 import 'package:flutter/material.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
+
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _RegisterScreenState extends State<RegisterScreen> {
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -23,12 +26,11 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Eventaty Title
+              // Eventaty Title 
               CustomHeader(),
           
               const SizedBox(height: 30),
           
-              // Form
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 24),
                 
@@ -43,9 +45,14 @@ class _LoginScreenState extends State<LoginScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Form
-                    CustomFormTitle(title: "Welcome To Eventaty Login Now!!"),
+                    CustomFormTitle(title: "Create A New Account?"),
           
                     const SizedBox(height: 30),
+                    
+                    // Name Section
+                    CustomInput(title: "Name", hintText: "John Doe", isPassword: false,),
+          
+                    const SizedBox(height: 20),
           
                     // Email Input
                     CustomInput(title: "Email", hintText: "johndoe@gmail.com", isPassword: false,),
@@ -53,16 +60,21 @@ class _LoginScreenState extends State<LoginScreen> {
                     const SizedBox(height: 20),
           
                     // Password Section
-                    CustomInput(title: "Password", hintText: ".............", isPassword: true),
+                    CustomInput(title: "Password", hintText:"..........", isPassword: true),
           
                     const SizedBox(height: 20),
+          
+                    // Retype Password Section
+                    CustomInput(title: "Retype Password", hintText:"..........", isPassword: true),
+          
+                    const SizedBox(height: 37),
                     
-                    // Login Button
-                    CustomLoginAndRegisterButton(title: "Login"),
+                    // Register Button
+                    CustomLoginAndRegisterButton(title: "Register"),
           
                     const SizedBox(height: 20),
           
-                    CustomLoginRegisterSwitch(title: "Don't Have Account?", navTo: "/register")
+                    CustomLoginRegisterSwitch(title: "Already Have Account?", navTo: "/login")
                   ],
                 ),
               ),
