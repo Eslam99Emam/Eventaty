@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 
 class CustomInput extends StatefulWidget {
-
   final String title;
   final bool isPassword;
   final String hintText;
+  final TextEditingController? controller;
 
-    const CustomInput(
-    {
-      super.key,
-      required this.title,
-      required this.hintText,
-      this.isPassword = false,
-    }
-  );
+  const CustomInput({
+    super.key,
+    required this.title,
+    required this.hintText,
+    this.isPassword = false,
+    this.controller,
+  });
 
   @override
   State<CustomInput> createState() => _CustomInputState();
@@ -21,6 +20,7 @@ class CustomInput extends StatefulWidget {
 
 class _CustomInputState extends State<CustomInput> {
   bool isHide = true;
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -28,13 +28,11 @@ class _CustomInputState extends State<CustomInput> {
       children: [
         Text(
           widget.title,
-          style:
-              TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-        ), 
-
-        const SizedBox(height: 10),
-
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+        ),
+        const SizedBox(height: 5),
         TextField(
+          controller: widget.controller,
           obscureText: widget.isPassword ? isHide : false,
           decoration: InputDecoration(
             hintText: widget.hintText,
@@ -46,24 +44,22 @@ class _CustomInputState extends State<CustomInput> {
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(15),
               borderSide: BorderSide.none,
-              
             ),
-            suffixIcon: widget.isPassword? IconButton(
-              icon: Icon(
-                isHide
-                    ? Icons.visibility_off
-                    : Icons.visibility,
-                color: Colors.grey,
-              ),
-              onPressed: () {
-                setState(() {
-                  isHide = !isHide;
-                });
-              },
-            ) : null           
+            suffixIcon: widget.isPassword
+                ? IconButton(
+                    icon: Icon(
+                      isHide ? Icons.visibility_off : Icons.visibility,
+                      color: Colors.grey,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        isHide = !isHide;
+                      });
+                    },
+                  )
+                : null,
           ),
         ),
-
       ],
     );
   }

@@ -31,7 +31,7 @@ class QrScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Image.asset(
-                  "assets/qr.png", // replace with your qr asset
+                  "assets/qr.png",
                   width: 200,
                   height: 200,
                 ),
