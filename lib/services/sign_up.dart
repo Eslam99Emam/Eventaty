@@ -9,7 +9,8 @@ class SignUpDataSource {
   }) async {
     return await supabase.auth.signUp(
       data: {
-      'name': name,
+        'name': name,
+        'isAdmin': false
       },
       email: email,
       password: password,

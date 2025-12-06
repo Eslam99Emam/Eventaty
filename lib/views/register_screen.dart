@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:eventaty/view_models/auth_view_model.dart';
 import 'package:eventaty/widgets/LoginAndRegisterWidgets/custom_form_title.dart';
 import 'package:eventaty/widgets/LoginAndRegisterWidgets/custom_header.dart';
@@ -38,7 +40,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
     super.dispose();
   }
 
-  void _handleRegister(BuildContext context, AuthViewModel authVM) async {
+  Future<void> _handleRegister(
+    BuildContext context,
+    AuthViewModel authVM,
+  ) async {
     if (_nameController.text.isEmpty ||
         _emailController.text.isEmpty ||
         _passwordController.text.isEmpty ||
@@ -50,23 +55,33 @@ class _RegisterScreenState extends State<RegisterScreen> {
     }
 
     if (_passwordController.text != _confirmPasswordController.text) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Passwords do not match')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Passwords do not match')));
       return;
     }
 
-    final success = await authVM.signUp(
+    final user = await authVM.signUp(
       email: _emailController.text,
       password: _passwordController.text,
       name: _nameController.text,
     );
 
-    if (success && mounted) {
+    log("user before");
+    log(user.toString());
+    if (user != null && mounted) {
+      log("user after");
+      log(user.toString());
+      log(user.id.toString());
+      log(user.name.toString());
+      log(user.email.toString());
+      log(user.isAdmin.toString());
+      log(user.password.toString());
       Navigator.pushReplacementNamed(context, '/home');
-    } else if (mounted && authVM.errorMessage != null) {
+    } else if (mounted && user == null) {
+      log("user is null");
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(authVM.errorMessage!)),
+        SnackBar(content: Text("Error Singing Up, Try again later")),
       );
     }
   }
@@ -85,12 +100,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   children: [
                     // Eventaty Title
                     const CustomHeader(),
-            
+
                     const SizedBox(height: 30),
-            
+
                     Container(
                       margin: const EdgeInsets.symmetric(horizontal: 24),
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 30,
+                      ),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(35),
@@ -100,9 +118,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         children: [
                           // Form Title
                           const CustomFormTitle(title: "Create A New Account?"),
-            
+
                           const SizedBox(height: 30),
-            
+
                           // Name Section
                           CustomInput(
                             title: "Name",
@@ -110,9 +128,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             isPassword: false,
                             controller: _nameController,
                           ),
-            
+
                           const SizedBox(height: 15),
-            
+
                           // Email Input
                           CustomInput(
                             title: "Email",
@@ -120,9 +138,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             isPassword: false,
                             controller: _emailController,
                           ),
-            
+
                           const SizedBox(height: 15),
-            
+
                           // Password Section
                           CustomInput(
                             title: "Password",
@@ -130,9 +148,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             isPassword: true,
                             controller: _passwordController,
                           ),
-            
+
                           const SizedBox(height: 15),
-            
+
                           // Confirm Password Section
                           CustomInput(
                             title: "Confirm Password",
@@ -140,37 +158,47 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             isPassword: true,
                             controller: _confirmPasswordController,
                           ),
-            
+
                           const SizedBox(height: 15),
-            
-                          // Error Message Display
-                          if (authVM.errorMessage != null)
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 15),
-                              child: Text(
-                                authVM.errorMessage!,
-                                style: const TextStyle(color: Colors.red),
-                              ),
-                            ),
-            
+
                           const SizedBox(height: 17),
-            
+
                           // Register Button
-                          GestureDetector(
-                            onTap: authVM.isLoading
-                                ? null
-                                : () => _handleRegister(context, authVM),
-                            child: CustomLoginAndRegisterButton(
-                              title: authVM.isLoading ? "Registering..." : "Register",
-                            ),
+                          Row(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Expanded(
+                                child: ElevatedButton(
+                                  onPressed: () async {
+                                    log("outer button pressed");
+                                    log("Registering function");
+                                    await _handleRegister(context, authVM);
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(28),
+                                    ),
+                                    backgroundColor: const Color(0xFF3177F0),
+                                  ),
+                                  child: Text(
+                                    "Register",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-            
+
                           const SizedBox(height: 15),
-            
+
                           const CustomLoginRegisterSwitch(
                             title: "Already Have Account?",
                             navTo: "/login",
-                          )
+                          ),
                         ],
                       ),
                     ),

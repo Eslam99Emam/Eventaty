@@ -9,19 +9,13 @@ class AuthViewModel extends ChangeNotifier {
 
   // State variables
   UserModel? _currentUser;
-  bool _isLoading = false;
-  String? _errorMessage;
-  bool _isLoggedIn = false;
 
   // Getters
   UserModel? get currentUser => _currentUser;
-  bool get isLoading => _isLoading;
-  String? get errorMessage => _errorMessage;
-  bool get isLoggedIn => _isLoggedIn;
 
 
   /// Sign up a new user
-  Future<bool> signUp({
+  Future<UserModel?> signUp({
     required String email,
     required String password,
     required String name,
@@ -30,10 +24,10 @@ class AuthViewModel extends ChangeNotifier {
       UserModel user = UserModel(
         name: name,
         email: email,
-        password: password, 
+        password: password,
         isAdmin: false,
       );
-      log("${result}");
+      log("${user}");
       SignUpDataSource _authDataSource = SignUpDataSource();
       SignUpRepo signUpRepo = SignUpRepo(data_source: _authDataSource);
 
@@ -46,15 +40,14 @@ class AuthViewModel extends ChangeNotifier {
           id: result.user!.id,
           name: name,
           email: email,
-          password: password, 
+          password: password,
           isAdmin: false,
         );
-        _isLoggedIn = true;
-      } 
-    } 
+      }
+    }
     catch (e) {
       throw Exception('An unexpected error occurred: ${e.toString()}');
     }
-    return _isLoggedIn;
+    return _currentUser;
   }
 }

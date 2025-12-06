@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
 class CustomLoginAndRegisterButton extends StatelessWidget {
@@ -11,13 +13,13 @@ class CustomLoginAndRegisterButton extends StatelessWidget {
   );
 
   @override
-  Widget build(BuildContext context) {                    
+  Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
       height: 50,
       child: ElevatedButton(
         onPressed: () {
-          Navigator.pushReplacementNamed(context, '/home');
+          log("inner button pressed");
         },
         style: ElevatedButton.styleFrom(
           shape: RoundedRectangleBorder(
